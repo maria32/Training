@@ -1,0 +1,258 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.1
+-- Dumped by pg_dump version 9.6.1
+
+-- Started on 2016-11-08 14:48:23
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 1 (class 3079 OID 12387)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2149 (class 0 OID 0)
+-- Dependencies: 1
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 187 (class 1259 OID 16413)
+-- Name: cities; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE cities (
+    "ID" integer NOT NULL,
+    "Name" character varying(30) NOT NULL,
+    district_id integer NOT NULL,
+    locuitori integer
+);
+
+
+ALTER TABLE cities OWNER TO postgres;
+
+--
+-- TOC entry 2150 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: TABLE cities; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON TABLE cities IS 'Exista judete care nu au orase';
+
+
+--
+-- TOC entry 185 (class 1259 OID 16394)
+-- Name: countries; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE countries (
+    "ID" integer NOT NULL,
+    "Name" character varying NOT NULL
+);
+
+
+ALTER TABLE countries OWNER TO postgres;
+
+--
+-- TOC entry 186 (class 1259 OID 16402)
+-- Name: districts; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE districts (
+    "ID" integer NOT NULL,
+    "Name" character varying(30) NOT NULL,
+    "Country_ID" integer NOT NULL
+);
+
+
+ALTER TABLE districts OWNER TO postgres;
+
+--
+-- TOC entry 188 (class 1259 OID 16487)
+-- Name: id_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE id_sequence
+    START WITH 1001
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE id_sequence OWNER TO postgres;
+
+--
+-- TOC entry 2141 (class 0 OID 16413)
+-- Dependencies: 187
+-- Data for Name: cities; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY cities ("ID", "Name", district_id, locuitori) FROM stdin;
+50	Pucioasa	37	15000
+51	Targoviste	37	20000
+52	Fieni	37	900
+53	Moroeni	37	300
+54	Constanta	42	30000
+55	Mayenne	44	20000
+56	Laval	44	30000
+57	Château-Gontier	44	90000
+58	Versailles	45	120000
+59	Bangor	47	200
+60	Caernarfon	47	300
+61	Tywyn	47	367
+62	Waterlooville	48	999
+63	Winchester	48	800
+\.
+
+
+--
+-- TOC entry 2139 (class 0 OID 16394)
+-- Dependencies: 185
+-- Data for Name: countries; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY countries ("ID", "Name") FROM stdin;
+29	Romania
+30	Anglia
+31	Germania
+32	Franta
+33	USA
+34	Polonia
+35	Rusia
+36	China
+\.
+
+
+--
+-- TOC entry 2140 (class 0 OID 16402)
+-- Dependencies: 186
+-- Data for Name: districts; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY districts ("ID", "Name", "Country_ID") FROM stdin;
+37	Dambovita	29
+38	Ilfov	29
+39	Arges	29
+40	Olt	29
+41	Timis	29
+42	Constanta	29
+43	Tulcea	29
+44	Mayenne	32
+45	Yvelines	32
+46	Essonne	32
+47	Gwynedd	30
+48	Hampshire	30
+49	Essonne	30
+64	Essex	30
+\.
+
+
+--
+-- TOC entry 2151 (class 0 OID 0)
+-- Dependencies: 188
+-- Name: id_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('id_sequence', 64, true);
+
+
+--
+-- TOC entry 2018 (class 2606 OID 16417)
+-- Name: cities Cities_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cities
+    ADD CONSTRAINT "Cities_pkey" PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 2015 (class 2606 OID 16406)
+-- Name: districts Districts_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY districts
+    ADD CONSTRAINT "Districts_pkey" PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 2011 (class 2606 OID 16438)
+-- Name: countries countries_Name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY countries
+    ADD CONSTRAINT "countries_Name_key" UNIQUE ("Name");
+
+
+--
+-- TOC entry 2013 (class 2606 OID 16401)
+-- Name: countries countries_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY countries
+    ADD CONSTRAINT countries_pkey PRIMARY KEY ("ID");
+
+
+--
+-- TOC entry 2016 (class 1259 OID 16412)
+-- Name: fki_country_id_to_district; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_country_id_to_district ON districts USING btree ("Country_ID");
+
+
+--
+-- TOC entry 2019 (class 1259 OID 16431)
+-- Name: fki_district_id_to_city; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX fki_district_id_to_city ON cities USING btree (district_id);
+
+
+--
+-- TOC entry 2020 (class 2606 OID 16407)
+-- Name: districts country_id_to_district; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY districts
+    ADD CONSTRAINT country_id_to_district FOREIGN KEY ("Country_ID") REFERENCES countries("ID");
+
+
+--
+-- TOC entry 2021 (class 2606 OID 16432)
+-- Name: cities district_id_to_city; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY cities
+    ADD CONSTRAINT district_id_to_city FOREIGN KEY (district_id) REFERENCES districts("ID");
+
+
+-- Completed on 2016-11-08 14:48:24
+
+--
+-- PostgreSQL database dump complete
+--
+
