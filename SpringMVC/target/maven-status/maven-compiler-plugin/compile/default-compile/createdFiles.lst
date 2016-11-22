@@ -1,0 +1,5 @@
+com\endava\springmvc\controller\HomeController.class
+com\endava\springmvc\controller\UserController.class
+com\endava\springmvc\model\User.class
+com\endava\springmvc\service\UserService.class
+com\endava\springmvc\service\UserServiceImpl.class
