@@ -1,0 +1,96 @@
+<html>
+<head>
+    <title>WeatherApp</title>
+
+    <script src="/js/jquery-1.11.1.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            var $form = $("#form");
+            var uri = "/weather";
+            $form.prop("action", uri);
+
+            $form.submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type : "POST",
+                    url : uri,
+                    data : $("#city-name").val(),
+                    contentType : "application/json",
+                    dataType : "json",
+                    success : function(result) {
+                        alert("Success");
+//                        $("#form")[0].reset();
+                        $("#name").val(result.name);
+                        $("#country").val(result.country);
+                    },
+                    error : function(error) {
+                        alert("Error: " + error.responseText);
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            var $formAddCityToUser = $("#form-add-city-to-user");
+            var uri = "/users/1/cities";
+            $formAddCityToUser.prop("action", uri);
+
+            $formAddCityToUser.submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type : "GET",
+                    url : uri,
+                    data : function(result) {
+                        $("#name").val(result.name);
+                        $("#country").val(result.country);
+                    },
+                    contentType : "application/json",
+                    dataType : "json",
+                    success : function(result) {
+                        alert("Success");
+                        console.log('Im in success zone for city!');
+                        $("#form")[0].reset();
+                    },
+                    error : function(error) {
+                        alert("Error: " + error.responseText);
+                        console.log(error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+
+<form id="form" name="form" action="">
+    City: <input type="text" name="city-name" id="city-name"><br>
+    <input type="submit" value="See Weather">
+</form>
+
+<br>
+
+
+
+
+City Details
+<br>
+<form id="form-add-city-to-user" name="form" action="">
+    <input id="id" type="hidden"/>
+    <label>Name</label><input id="name" type="text"/><br>
+    <label>Country</label><input id="country" type="text"/><br>
+    <input type="submit" value="Add to favorites">
+</form>
+
+<br>
+Hello To You!
+</body>
+</html>

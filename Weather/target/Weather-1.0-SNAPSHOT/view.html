@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>WeatherApp</title>
+
+    <script src="../js/jquery-1.11.1.min.js"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            var $form = $("#form");
+            var uri = "/cities";
+            $form.prop("action", uri);
+
+            $form.submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url : uri,
+                    dataType : "json",
+                    type : "GET",
+                    data : {
+                        page : 0,
+                        size : 10,
+                        sort : "name,ASC",
+                        name : request.term
+                    },
+                    dataType : "json",
+                    success : function(data) {
+                        response(_.map(data.rows, function(e) {
+                            return {
+                                name : e.name,
+                                country : e.country
+                            };
+                        }));
+                    }
+                });
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+
+<div>
+    <table id="table-list-cities">
+        <tr>
+            <th data-field="name"></th>
+        </tr>
+    </table>
+    <label>Name</label><input id="name" type="text"/>
+    <label>Country</label><input id="country" type="text"/>
+</div>
+
+Hello To You!
+</body>
+</html>
