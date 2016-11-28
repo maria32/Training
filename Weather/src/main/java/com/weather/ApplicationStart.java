@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 /**
  * Created by martanase on 11/22/2016.
  */
-//@Configuration
+@Configuration
 //@ComponentScan(basePackages = { "com.endava.weatherapp" })
 //@ImportResource(value = { "classpath:beans.xml" })
 @SpringBootApplication

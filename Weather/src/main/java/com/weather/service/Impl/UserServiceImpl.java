@@ -1,11 +1,14 @@
 package com.weather.service.Impl;
 
 import com.weather.model.City;
+import com.weather.model.Dto.CityDto;
+import com.weather.model.Dto.UserDto;
 import com.weather.repository.CityRepository;
 import com.weather.repository.UserRepository;
 import com.weather.exception.ResourceAlreadyExistsException;
 import com.weather.exception.ResourceNotFoundException;
 import com.weather.model.User;
+import com.weather.service.CityService;
 import com.weather.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by martanase on 11/22/2016.
@@ -40,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
-        User existingUser = getOne(user.getId());
+        User existingUser = user == null ? null : userRepository.findOne(user.getId());
         User existingUsername = userRepository.findByUsername(user.getUsername());
         if(existingUsername != null && existingUser.getUsername() != existingUsername.getUsername())
             throw new ResourceAlreadyExistsException();
@@ -49,36 +53,76 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getOne(Long id) {
+    public UserDto getOne(Long id) {
         User user = id == null ? null : userRepository.findOne(id);
         if(user == null)
             throw new ResourceNotFoundException();
-        return user;
+        return populateUserDto(user);
     }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> usersDto = users.stream().map(this::populateUserDto).collect(Collectors.toList());
+        return usersDto;
+    }
+
+    private UserDto populateUserDto(User user){
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setName(user.getName());
+        userDto.setUsername(user.getUsername());
+        userDto.setPassword(user.getPassword());
+
+        List<CityDto> citiesDto = user.getCities().stream().map(this::populateCityDto).collect(Collectors.toList());
+        userDto.setCities(citiesDto);
+
+        return userDto;
+    }
+
+    private CityDto populateCityDto(City city){
+        CityDto cityDto = new CityDto();
+        cityDto.setId(city.getId());
+        cityDto.setName(city.getName());
+        cityDto.setCountry(city.getCountry());
+        cityDto.setDailyTemperatures(city.getDailyTemperatures());
+
+        return cityDto;
     }
 
     @Override
     public void delete(Long id) {
-        userRepository.delete(getOne(id));
+        userRepository.delete(userRepository.findOne(id));
+    }
+
+    @Override
+    public User checkCredentials(User user) {
+        User userByUsername = new User();
+        if(user != null && user.getUsername() != null & user.getPassword() != null){
+            userByUsername = userRepository.findByUsername(user.getUsername());
+            if(userByUsername.getPassword().equals(user.getPassword()))
+                return userByUsername;
+        }
+        return null;
     }
 
     @Override
     public User addCityToUser(Long userId, String cityName) {
         User user = userId == null ? null : userRepository.findOne(userId);
         City city = cityName == null ? null : cityRepository.findByName(cityName);
+
+        user.getCities().add(city);
         if (user != null && city != null){
-            List<City> citiesList = new ArrayList<>();
-            citiesList = user.getCities();
-            if(!existsCityInList(user, city))
+            List<City> citiesList = user.getCities();
+            if(!existsCityInList(user, city)) {
                 citiesList.add(city);
+            }
             user.setCities(citiesList);
-            userRepository.save(user);
+            return userRepository.save(user);
         }
-        return user;
+
+
+        return null;
     }
 
     /*check if city already exists to user's list of cities*/
@@ -87,5 +131,14 @@ public class UserServiceImpl implements UserService {
             return true;
         return false;
 
+    }
+
+    @Override
+    public void deleteCityFromUserByCityName(Long id, String cityName) {
+        User user = id == null ? null : userRepository.findOne(id);
+        if(user != null  && cityName != null) {
+            user.getCities().remove(cityRepository.findByName(cityName));
+            userRepository.save(user);
+        }
     }
 }

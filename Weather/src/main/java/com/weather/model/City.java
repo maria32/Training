@@ -1,9 +1,11 @@
 package com.weather.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.json.JSONObject;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +14,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "cities")
-public class City {
+public class City implements Serializable{
 
     @Id
     private Long id;
@@ -24,14 +26,12 @@ public class City {
     @Column(columnDefinition = "TEXT")
     private String json;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "city", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Temperature> dailyTemperatures;
 
-    @ManyToMany
-    @JoinTable(name = "user2cities",
-            joinColumns = @JoinColumn(name = "cityId"),
-            inverseJoinColumns = @JoinColumn(name = "userId"))
+
+    @JsonBackReference
+    @ManyToMany(mappedBy = "cities", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<User> users;
 
     @Column(name = "date_of_update")

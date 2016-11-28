@@ -1,6 +1,10 @@
 package com.weather.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,13 +13,15 @@ import java.util.Date;
 
 @Entity
 @Table(name = "temperatures")
-public class Temperature {
+public class Temperature implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "city_id")
     private City city;
 
@@ -45,20 +51,12 @@ public class Temperature {
         this.id = id;
     }
 
-    public City getIdCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setIdCity(City city) {
+    public void setCity(City city) {
         this.city = city;
-    }
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
     }
 
     public Date getDay() {
@@ -69,13 +67,39 @@ public class Temperature {
         this.day = day;
     }
 
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public double getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(double humidity) {
+        this.humidity = humidity;
+    }
+
+    public String getWeather() {
+        return weather;
+    }
+
+    public void setWeather(String weather) {
+        this.weather = weather;
+    }
+
     @Override
     public String toString() {
         return "Temperature{" +
                 "id=" + id +
                 ", city=" + city +
-                ", temperature=" + temperature +
                 ", day=" + day +
+                ", temperature=" + temperature +
+                ", humidity=" + humidity +
+                ", weather='" + weather + '\'' +
                 '}';
     }
 }

@@ -1,6 +1,10 @@
 package com.weather.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +25,11 @@ public class User {
 
     private String password;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+
+    @ManyToMany
+    @JoinTable(name = "user2cities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "city_id"))
     private List<City> cities;
 
     public User() {

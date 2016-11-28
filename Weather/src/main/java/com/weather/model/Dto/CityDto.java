@@ -1,5 +1,9 @@
 package com.weather.model.Dto;
 
+import com.weather.model.Temperature;
+
+import java.util.List;
+
 /**
  * Created by martanase on 11/25/2016.
  */
@@ -10,6 +14,8 @@ public class CityDto {
     private String name;
 
     private String country;
+
+    private List<Temperature> dailyTemperatures;
 
     public CityDto() {
     }
@@ -38,12 +44,21 @@ public class CityDto {
         this.country = country;
     }
 
+    public List<Temperature> getDailyTemperatures() {
+        return dailyTemperatures;
+    }
+
+    public void setDailyTemperatures(List<Temperature> dailyTemperatures) {
+        this.dailyTemperatures = dailyTemperatures;
+    }
+
     @Override
     public String toString() {
         return "CityDto{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", country='" + country + '\'' +
+                ", dailyTemperatures=" + dailyTemperatures +
                 '}';
     }
 }

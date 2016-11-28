@@ -1,6 +1,7 @@
 package com.weather.service;
 
 import com.weather.model.City;
+import com.weather.model.Dto.UserDto;
 import com.weather.model.User;
 
 import java.util.List;
@@ -15,12 +16,15 @@ public interface UserService{
 
     User update(User user);
 
-    User getOne(Long id);
+    UserDto getOne(Long id);
 
-    List<User> getUsers();
+    List<UserDto> getUsers();
 
     void delete(Long id);
 
     User addCityToUser(Long userId, String cityName);
 
+    User checkCredentials(User user);
+
+    void deleteCityFromUserByCityName(Long id, String cityName);
 }

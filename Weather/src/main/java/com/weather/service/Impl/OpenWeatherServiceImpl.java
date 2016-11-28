@@ -34,6 +34,27 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
     private CityService cityService;
 
 
+    /***
+     * Method gets json from openweathermap.org for *cityName*  and inserts
+     * city and temperatures tu database
+     *
+     * @param cityName
+     */
+    public CityDto getWeatherDetails(String cityName){
+
+        CityDto cityDto = new CityDto();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject = readJsonFromUrl(createRequestUrl(cityName));
+            System.out.println(jsonObject);
+            cityDto = cityService.create(jsonObject);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return cityDto;
+    }
+
     private String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
@@ -56,27 +77,6 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
         }
     }
 
-    /***
-     * Method gets json from openweathermap.org for *cityName*  and inserts
-     * city and temperatures tu database
-     *
-     * @param cityName
-     */
-    public CityDto getWeatherDetails(String cityName){
-
-        CityDto cityDto = new CityDto();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject = readJsonFromUrl(createRequestUrl(cityName));
-            System.out.println(jsonObject);
-            cityDto = cityService.create(jsonObject);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return cityDto;
-    }
-
     private String createRequestUrl(String cityName){
         WeatherApiConfiguration apiKey = new WeatherApiConfiguration();
         StringBuffer requestUrl = new StringBuffer(apiUrl);
@@ -93,13 +93,6 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
         System.out.println("\n\tURL:\t" + requestUrl.toString());
         return requestUrl.toString();
     }
-
-//    public static void main(String[] args) {
-//
-//        OpenWeatherServiceImpl weather = new OpenWeatherServiceImpl();
-//        weather.getWeatherDetails("Bucharest,ro");
-//
-//    }
 }
 
 

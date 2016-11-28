@@ -1,6 +1,7 @@
 package com.weather.controller;
 
 import com.weather.model.City;
+import com.weather.model.Dto.UserDto;
 import com.weather.model.User;
 import com.weather.service.CityService;
 import com.weather.service.UserService;
@@ -37,16 +38,17 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public User getOne(@PathVariable("id") Long id) { return userService.getOne(id); }
+    public UserDto getOne(@PathVariable("id") Long id) { return userService.getOne(id); }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
         return userService.getUsers(); }
 
     @RequestMapping(value = "/{id}/city/{cityName}", method = RequestMethod.POST)
     @ResponseBody
     public User addCityToUser(@PathVariable("id") Long userId, @PathVariable("cityName") String cityName){
+        System.out.println("\t****add city to user");
         return userService.addCityToUser(userId, cityName);
     }
 
@@ -59,6 +61,17 @@ public class UserController {
     @ResponseBody
     public void delete(@PathVariable("id") Long id) { userService.delete(id); }
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public User checkCredentials(@RequestBody User user){
+        return userService.checkCredentials(user);
+    }
+
+    @RequestMapping(value = "/{id}/city/{cityName}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void delete(@PathVariable("id") Long id, @PathVariable("cityName") String cityName){
+        userService.deleteCityFromUserByCityName(id, cityName);
+    }
 
 
 }

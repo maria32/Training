@@ -33,8 +33,8 @@ public class CityServiceImpl implements CityService{
     @Autowired
     UserRepository userRepository;
 
-//    @Autowired
-//    TemperatureService temperatureService;
+    @Autowired
+    TemperatureService temperatureService;
 
     public CityDto create(JSONObject jsonObject){
 
@@ -47,12 +47,14 @@ public class CityServiceImpl implements CityService{
         city.setName((String) jsonObject.getJSONObject("city").get("name"));
         city.setCountry((String) jsonObject.getJSONObject("city").get("country"));
         city.setDateOfUpdate(new Date());
+        //city.setDailyTemperatures(temperatureService.createTemperatures(jsonObject));
+
             //set dailyTemperatures and users
 
         System.out.println("CityServiceImpl" + city.toString());
         cityRepository.save(city);
 
-        CityDto cityDto = new CityDto();
+        temperatureService.createTemperatures(city, jsonObject);
         return populateFromCity(city);
     }
 
