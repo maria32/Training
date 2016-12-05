@@ -89,6 +89,7 @@ public class User implements Serializable{
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", cities=" + cities +
                 '}';
     }
 }

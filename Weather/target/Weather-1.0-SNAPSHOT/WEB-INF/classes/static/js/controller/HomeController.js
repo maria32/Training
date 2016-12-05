@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('WeatherApp')
-    .controller('HomeController', function ($scope, $rootScope, $http, $routeParams, $location, NotificationService) {
+    .controller('HomeController', function ($scope, $http, $routeParams, $location, NotificationService) {
 
-        if ($rootScope.loggedUser === undefined) {
+        $scope.$storage = $sessionStorage;
+
+        if($scope.$storage.id == undefined){
             $location.path("/login");
         }
-
     });

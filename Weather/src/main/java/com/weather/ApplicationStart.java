@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by martanase on 11/22/2016.
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 //@ComponentScan(basePackages = { "com.endava.weatherapp" })
 //@ImportResource(value = { "classpath:beans.xml" })
 @SpringBootApplication
+@EnableScheduling
 @EnableAutoConfiguration
 public class ApplicationStart extends SpringBootServletInitializer {
 

@@ -1,0 +1,63 @@
+<!--Menu-->
+<div class="container">
+    <div class="container">
+        <!-- Account actions -->
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{$storage.name}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a>My profile</a></li>
+                <li><a href="/#/">Favorites</a></li>
+                <li><a href="/#/map">Romania Map</a></li>
+                <li role="separator" class="divider"></li>
+                <li ng-click="logout()"><a>Log out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!--Search City Details-->
+    <!--ng-show="citySee.id != undefined"-->
+    <div ng-show="citySee.id != undefined">
+        <div  class = "modal fade" id="modalCityDetails" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{citySee.name}},{{citySee.country}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--Details of searched city-->
+                        <div ng-if="citySee.dailyTemperatures.length != 0">
+                            <table class="table table-striped">
+                                <thead>
+                                <th class="text-center">Day</th>
+                                <th class="text-center">Weather</th>
+                                <th class="text-center">Min</th>
+                                <th class="text-center">Max</th>
+                                <th class="text-center">Humidity</th>
+                                </thead>
+                                <tr ng-repeat="temp in citySee.dailyTemperatures" class="text-center">
+                                    <td>{{temp.day | date:'EEE, d MMM'}}</td>
+                                    <td><a title="{{temp.weather}}"><img src="../images/{{temp.weather}}.ico" height="25%"/></a></td>
+                                    <td>{{temp.tempMin}}&#8451;</td>
+                                    <td>{{temp.tempMax}}&#8451;</td>
+                                    <td>{{temp.humidity}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="addCity()" data-dismiss="modal">Add to favorites</button>
+                        </div>
+                    </div> <!--modal-body-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center" id=harta data-toggle="modal" data-target="#modalCityDetails"></div>
+    <div id=info></div>
+
+
+</div>

@@ -67,6 +67,59 @@ public class UserServiceImpl implements UserService {
         return usersDto;
     }
 
+
+
+    @Override
+    public void delete(Long id) {
+        userRepository.delete(userRepository.findOne(id));
+    }
+
+    @Override
+    public User checkCredentials(User user) {
+        User userByUsername;
+        if(user != null && user.getUsername() != null && user.getPassword() != null){
+            userByUsername = userRepository.findByUsername(user.getUsername());
+            if(userByUsername != null && userByUsername.getPassword().equals(user.getPassword()))
+                return userByUsername;
+        }
+        return null;
+    }
+
+    @Override
+    public CityDto addCityToUser(Long userId, String cityName) {
+        User user = userId == null ? null : userRepository.findOne(userId);
+        City city = cityName == null ? null : cityRepository.findByName(cityName);
+
+        if (user != null && city != null){
+            List<City> citiesList = user.getCities();
+            if(!existsCityInList(user, city)) {
+                citiesList.add(city);
+                user.setCities(citiesList);
+                userRepository.save(user);
+
+                return populateCityDto(city);
+            }
+        }
+        return null;
+    }
+
+    /*check if city already exists to user's list of cities*/
+    private boolean existsCityInList(User user, City city){
+        if(user.getCities().contains(city)){
+            return true;
+        }
+        return false;
+
+    }
+
+    @Override
+    public void deleteCityFromUserByCityName(Long id, String cityName) {
+        User user = id == null ? null : userRepository.findOne(id);
+        if(user != null  && cityName != null) {
+            user.getCities().remove(cityRepository.findByName(cityName));
+            userRepository.save(user);
+        }
+    }
     private UserDto populateUserDto(User user){
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
@@ -90,55 +143,4 @@ public class UserServiceImpl implements UserService {
         return cityDto;
     }
 
-    @Override
-    public void delete(Long id) {
-        userRepository.delete(userRepository.findOne(id));
-    }
-
-    @Override
-    public User checkCredentials(User user) {
-        User userByUsername = new User();
-        if(user != null && user.getUsername() != null & user.getPassword() != null){
-            userByUsername = userRepository.findByUsername(user.getUsername());
-            if(userByUsername.getPassword().equals(user.getPassword()))
-                return userByUsername;
-        }
-        return null;
-    }
-
-    @Override
-    public User addCityToUser(Long userId, String cityName) {
-        User user = userId == null ? null : userRepository.findOne(userId);
-        City city = cityName == null ? null : cityRepository.findByName(cityName);
-
-        user.getCities().add(city);
-        if (user != null && city != null){
-            List<City> citiesList = user.getCities();
-            if(!existsCityInList(user, city)) {
-                citiesList.add(city);
-            }
-            user.setCities(citiesList);
-            return userRepository.save(user);
-        }
-
-
-        return null;
-    }
-
-    /*check if city already exists to user's list of cities*/
-    private boolean existsCityInList(User user, City city){
-        if(user.getCities().contains(city))
-            return true;
-        return false;
-
-    }
-
-    @Override
-    public void deleteCityFromUserByCityName(Long id, String cityName) {
-        User user = id == null ? null : userRepository.findOne(id);
-        if(user != null  && cityName != null) {
-            user.getCities().remove(cityRepository.findByName(cityName));
-            userRepository.save(user);
-        }
-    }
 }

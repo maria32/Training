@@ -13,4 +13,6 @@ import java.util.List;
 public interface TemperatureRepository extends CrudRepository<Temperature, Long>{
 
     List<Temperature> getTemperaturesByCityId(Long cityId);
+
+    void deleteByCityId(Long cityId);
 }

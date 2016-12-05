@@ -39,6 +39,13 @@ public class CityController {
     @ResponseBody
     public List<CityDto> getAll() { return cityService.getAllDto(); }
 
+//    @RequestMapping(value = "/{cityName}", method = RequestMethod.PUT)
+//    @ResponseBody
+//    public CityDto update(@PathVariable("cityName") String cityName){
+//        //user.setId(id);
+//        return cityService.update(cityName);
+//    }
+
 
 
 }

@@ -34,7 +34,7 @@ public class City implements Serializable{
     @ManyToMany(mappedBy = "cities", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<User> users;
 
-    @Column(name = "date_of_update")
+    @Column(name = "date_of_update", columnDefinition = "DATE")
     private Date dateOfUpdate;
 
     public City() {
@@ -104,7 +104,6 @@ public class City implements Serializable{
                 ", country='" + country + '\'' +
                 ", json='" + json + '\'' +
                 ", dailyTemperatures=" + dailyTemperatures +
-                ", users=" + users +
                 ", dateOfUpdate=" + dateOfUpdate +
                 '}';
     }

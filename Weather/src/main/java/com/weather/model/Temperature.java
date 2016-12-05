@@ -1,6 +1,7 @@
 package com.weather.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -25,22 +26,21 @@ public class Temperature implements Serializable{
     @JoinColumn(name = "city_id")
     private City city;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyy-MM-dd", timezone = "EET")
+    @Column(columnDefinition = "DATE")
     private Date day;
 
-    private double temperature;
+    @Column(name = "temp_min", columnDefinition = "INT")
+    private double tempMin;
+
+    @Column(name = "temp_max", columnDefinition = "INT")
+    private double tempMax;
 
     private double humidity;
 
     private String weather; /* id=500 "Rain", id=800 "Clear", ""*/
 
     public Temperature() {
-    }
-
-    public Temperature(Long id, City city, int temperature, Date day) {
-        this.id = id;
-        this.city = city;
-        this.temperature = temperature;
-        this.day = day;
     }
 
     public Long getId() {
@@ -67,12 +67,20 @@ public class Temperature implements Serializable{
         this.day = day;
     }
 
-    public double getTemperature() {
-        return temperature;
+    public double getTempMin() {
+        return tempMin;
     }
 
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
+    public void setTempMin(double tempMin) {
+        this.tempMin = tempMin;
+    }
+
+    public double getTempMax() {
+        return tempMax;
+    }
+
+    public void setTempMax(double tempMax) {
+        this.tempMax = tempMax;
     }
 
     public double getHumidity() {
@@ -97,7 +105,8 @@ public class Temperature implements Serializable{
                 "id=" + id +
                 ", city=" + city +
                 ", day=" + day +
-                ", temperature=" + temperature +
+                ", tempMin=" + tempMin +
+                ", tempMax=" + tempMax +
                 ", humidity=" + humidity +
                 ", weather='" + weather + '\'' +
                 '}';

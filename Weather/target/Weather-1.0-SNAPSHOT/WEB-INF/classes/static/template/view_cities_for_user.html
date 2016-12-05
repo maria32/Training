@@ -1,0 +1,115 @@
+
+<!--Menu-->
+<div class="container">
+    <div class="container">
+        <!-- Account actions -->
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{$storage.name}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a>My profile</a></li>
+                <li><a href="/#/">Favorites</a></li>
+                <li ng-click="goToMap()"><a>Romania Map</a></li>
+                <li role="separator" class="divider"></li>
+                <li ng-click="logout()"><a>Log out</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <!--Search area-->
+        <div class="col-sm-5 col-md-5">
+            <form ng-submit="getWeather()" class="navbar-form" role="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="cityName" placeholder="Search" name="q" required>
+                    <br>
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit" data-toggle="modal" data-target="#modalCityDetails"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div >
+        <!--Search City Details-->
+        <!--ng-show="citySee.id != undefined"-->
+        <div ng-show="citySee.id != undefined">
+        <div  class = "modal fade" id="modalCityDetails" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{citySee.name}},{{citySee.country}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--Detailes of searched city-->
+                        <div ng-if="citySee.dailyTemperatures.length != 0">
+                            <table class="table table-striped">
+                                <thead>
+                                <th class="text-center">Day</th>
+                                <th class="text-center">Weather</th>
+                                <th class="text-center">Min</th>
+                                <th class="text-center">Max</th>
+                                <th class="text-center">Humidity</th>
+                                </thead>
+                                <tr ng-repeat="temp in citySee.dailyTemperatures" class="text-center">
+                                    <td>{{temp.day | date:'EEE, d MMM'}}</td>
+                                    <td><a title="{{temp.weather}}"><img src="../images/{{temp.weather}}.ico" height="25%"/></a></td>
+                                    <td>{{temp.tempMin}}&#8451;</td>
+                                    <td>{{temp.tempMax}}&#8451;</td>
+                                    <td>{{temp.humidity}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" ng-click="addCity()" data-dismiss="modal">Add to favorites</button>
+                        </div>
+                    </div> <!--modal-body-->
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+<br><br><br><br>
+
+    <h3 style="display:inline;"><i class="glyphicon glyphicon-star" style="color:blue"></i></h3><h1 style="display:inline;">  Favorites</h1>
+    <br><br>
+    <div ng-show="cities == ''">No cities added to favorites.</div>
+    <table class="table table-responsive table-condensed table-hover center-block">
+
+        <!--style="cursor: move;"-->
+        <tr ng-repeat="city in cities">
+            <td><div><div hidden>{{$index + 1}}</div><i class="glyphicon glyphicon-remove" ng-click="deleteCity(city.name, $index)"></i></div></td>
+            <td data-toggle="collapse"  data-target="#details{{$index}}, #haha{{$index}}" class="clickable"><b>{{city.name}}, {{city.country}}</b>
+                <br>
+                <!--Weather-icon for the day-->
+                <img src="../images/{{city.dailyTemperatures[0].weather}}.ico"/><br>
+                {{city.dailyTemperatures[0].day | date:'EEE, d MMM'}} <h3 style="display:inline;">{{city.dailyTemperatures[0].tempMax}}&#8451;</h3>
+            </td>
+            <td>
+                <!--<div ng-if="city.dailyTemperatures.length != 0">-->
+                <div id="details{{$index}}" class="collapse">
+                    <table class="table table-striped table-condensed text-center">
+                        <thead>
+                        <th class="text-center">Day</th>
+                        <th>Weather</th>
+                        <th class="text-center">Min</th>
+                        <th class="text-center">Max</th>
+                        <th class="text-center">Humidity</th>
+                        </thead>
+                        <tr ng-repeat="temp in city.dailyTemperatures">
+                            <td>{{temp.day | date:'EEE, d MMM'}}</td>
+                            <td><a title="{{temp.weather}}"><img src="../images/{{temp.weather}}.ico" height="15%"/></a></td>
+                            <td>{{temp.tempMin}}&#8451;</td>
+                            <td>{{temp.tempMax}}&#8451;</td>
+                            <td>{{temp.humidity}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td id="haha{{$index}}" class="collapse">
+                <a><i type="button" class="glyphicon glyphicon-refresh" ng-click="updateCity(city.name, $index)"></i></a>
+            </td>
+        </tr>
+    </table>
+</div>

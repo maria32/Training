@@ -1,6 +1,7 @@
 package com.weather.service;
 
 import com.weather.model.City;
+import com.weather.model.Dto.CityDto;
 import com.weather.model.Dto.UserDto;
 import com.weather.model.User;
 
@@ -22,7 +23,7 @@ public interface UserService{
 
     void delete(Long id);
 
-    User addCityToUser(Long userId, String cityName);
+    CityDto addCityToUser(Long userId, String cityName);
 
     User checkCredentials(User user);
 

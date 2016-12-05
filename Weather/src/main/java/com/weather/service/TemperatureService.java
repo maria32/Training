@@ -12,5 +12,7 @@ import java.util.List;
 public interface TemperatureService {
     List<Temperature> getTemperaturesForCity(Long cityId);
 
-    void createTemperatures(City city, JSONObject jsonObject);
+    List<Temperature> createTemperatures(City city, JSONObject jsonObject);
+
+    void deleteTemperatures(Long cityId);
 }

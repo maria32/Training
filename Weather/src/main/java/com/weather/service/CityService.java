@@ -13,15 +13,17 @@ public interface CityService {
 
     CityDto create(JSONObject jsonObject);
 
-    City update(JSONObject jsonObject);
+    CityDto update(City city, JSONObject jsonObject);
 
     City getOne(Long id);
 
     CityDto getOneByName(String cityName);
 
+    List<City> getAll();
+
     List<CityDto> getAllDto();
 
-    List<City> getAllCitiesFotUser(Long userId);
+    List<CityDto> getAllCitiesFotUser(Long userId);
 
     void delete(Long id);
 }

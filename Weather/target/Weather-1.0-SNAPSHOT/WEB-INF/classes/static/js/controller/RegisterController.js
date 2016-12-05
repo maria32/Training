@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('WeatherApp')
-    .controller('RegisterController', function ($scope, $rootScope, $http, $routeParams, $location, NotificationService) {
+    .controller('RegisterController', function ($scope, $sessionStorage, $http, $routeParams, $location, NotificationService) {
 
-        $scope.ok = function() {
+        $scope.register = function() {
 
             $http({
                 method: 'POST',
@@ -15,8 +15,20 @@ angular.module('WeatherApp')
                     password: $scope.password
                 }
             }).then(function successCallback(response) {
-                $rootScope.loggedUser = response.data;
-                $location.path('/');
+
+                console.log(response.data.authMessage);
+                if (response.data != "") {
+
+                    $scope.$storage = $sessionStorage.$default({
+                        id: response.data.id,
+                        name: response.data.name,
+                        username: response.data.username
+                    });
+                    $location.path('/')
+
+                } else {
+                    NotificationService.error("AUTHENTICATION ERROR!");
+                }
             });
         };
 

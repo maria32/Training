@@ -1,0 +1,22 @@
+<!--Menu-->
+<div class="container" ng-controller="ToolbarController">
+    <div>
+        username: {{user.name}}
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" data-tabs="tabs">
+            <li role="presentation" onclick="click()"><a href="#home" data-toggle="tab">Home</a></li>
+            <li role="presentation" onclick="click()"><a href="#profile" data-toggle="tab">Profile</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div class="tab-pane fade in active" id="home">
+                [This is "Home" tab]
+            </div>
+            <div class="tab-pane fade" id="profile">
+                [This is "Profile" tab]
+            </div>
+        </div>
+
+    </div>
+</div>
