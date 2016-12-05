@@ -38,10 +38,8 @@ public class RefreshDataBase{
         System.out.println("Execute RefreshDataBase started");
         List<City> cities = cityService.getAll();
         for(City city: cities){
-            String cityName = city.getName().replaceAll(" ", "%20").concat("," + city.getCountry());
-            System.out.println("\t" + cityName);
             try {
-                JSONObject json = openWeatherService.getJsonFromUrl(cityName);
+                JSONObject json = openWeatherService.getJsonFromUrl(city.getName());
                 cityService.update(city, json);
             } catch (IOException e) {
                 e.printStackTrace();

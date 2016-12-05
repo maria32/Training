@@ -81,7 +81,7 @@ public class OpenWeatherServiceImpl implements OpenWeatherService {
         requestUrl.append("?")
                 .append(cityParamName)
                 .append("=")
-                .append(cityName)
+                .append(cityName.replace(" ", "%20"))
                 .append("&")
                 .append("mode=json")
                 .append("&units=metric")
